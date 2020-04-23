@@ -1,0 +1,20 @@
+name: presumm
+channels:
+  - conda-forge
+  - pytorch
+  - defaults
+dependencies:
+  - python=3.6
+  - numpy=1.17
+  - multiprocess=0.70.9
+  - jupyter
+  - jupyter_contrib_nbextensions
+  - tensorboardx=1.9
+  - pip
+  - pip:
+    - torch==1.1.0
+    - pyrouge==0.1.3
+    - pytorch-transformers==1.2.0
+
+
+
