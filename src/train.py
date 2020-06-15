@@ -75,7 +75,7 @@ if __name__ == '__main__':
     parser.add_argument("-max_length", default=150, type=int)
     parser.add_argument("-max_tgt_len", default=140, type=int)
 
-
+    parser.add_argument("-output_sentence_count", default=5, type=int) # BRS
 
     parser.add_argument("-param_init", default=0, type=float)
     parser.add_argument("-param_init_glorot", type=str2bool, nargs='?',const=True,default=True)
