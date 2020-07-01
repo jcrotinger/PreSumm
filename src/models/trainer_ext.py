@@ -227,11 +227,11 @@ class Trainer(object):
 
         can_path = '%s_step%d.candidate' % (self.args.result_path, step)
         gold_path = '%s_step%d.gold' % (self.args.result_path, step)
-        ranking_path = '%s_step%d.ranking' % (self.args.result_path, step)
+        scoring_path = '%s_step%d.scoring' % (self.args.result_path, step)
 
         with open(can_path, 'w') as save_pred:
             with open(gold_path, 'w') as save_gold:
-                with open(ranking_path, 'wb') as save_ranking:
+                with open(scoring_path, 'wb') as save_scoring:
                     with torch.no_grad():
                         for batch in test_iter:
                             src = batch.src
@@ -243,7 +243,7 @@ class Trainer(object):
 
                             gold = []
                             pred = []
-                            rank = []
+                            score = []
 
                             if (cal_lead):
                                 selected_ids = [list(range(batch.clss.size(1)))] * batch.batch_size
@@ -290,17 +290,14 @@ class Trainer(object):
 
                                 pred.append(_pred)
                                 gold.append(batch.tgt_str[i])
-                                rank.append((sent_scores, selected_ids))
+                            score.append(sent_scores)
 
                             for i in range(len(gold)):
                                 save_gold.write(gold[i].strip() + '\n')
                             for i in range(len(pred)):
                                 save_pred.write(pred[i].strip() + '\n')
-                            for i in range(len(rank)):
-                                np.savetxt(save_ranking, rank[i][0])
-                            for i in range(len(rank)):
-                                np.savetxt(save_ranking, rank[i][1], fmt='%d')
-                            #     save_ranking.write(str(rank[i]) + '\n')
+                            for i in range(len(score)):
+                                np.savetxt(save_scoring, score[i])
 
         if (step != -1 and self.args.report_rouge):
             rouges = test_rouge(self.args.temp_dir, can_path, gold_path)
