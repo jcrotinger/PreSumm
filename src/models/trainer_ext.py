@@ -214,9 +214,9 @@ class Trainer(object):
             return ngram_set
 
         def _block_tri(c, p):
-            tri_c = _get_ngrams(3, c.split())
+            tri_c = _get_ngrams(self.args.ngram_size, c.split())
             for s in p:
-                tri_s = _get_ngrams(3, s.split())
+                tri_s = _get_ngrams(self.args.ngram_size, s.split())
                 if len(tri_c.intersection(tri_s)) > 0:
                     return True
             return False
@@ -255,6 +255,8 @@ class Trainer(object):
                             else:
                                 sent_scores, mask = self.model(src, segs, clss, mask, mask_cls)
 
+                                print(f"scores={sent_scores}")
+                                print(f"mask={mask}")
                                 loss = self.loss(sent_scores, labels.float())
                                 loss = (loss * mask.float()).sum()
                                 batch_stats = Statistics(float(loss.cpu().data.numpy()), len(labels))
